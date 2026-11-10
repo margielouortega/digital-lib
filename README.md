@@ -27,8 +27,8 @@ cd backend
 npm install
 node server.js
 ```
-Backend API: http://localhost:5000/api
-Health check: http://localhost:5000/api/health
+Backend API: https://digital-lib-ey03.onrender.com//api
+Health check: https://digital-lib-ey03.onrender.com//api/health
 
 ### Terminal 2 — Frontend
 ```bash
