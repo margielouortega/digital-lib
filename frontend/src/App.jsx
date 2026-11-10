@@ -5,7 +5,10 @@ import {
   AlertCircle, LockKeyhole, UserRound, CalendarDays, ChevronRight, RefreshCw
 } from "lucide-react";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+const API = (
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api"
+).replace(/\/$/, "");
 const blankBook = { isbn: "", title: "", author: "", publisher: "", category: "General", published_year: "", total_copies: 1 };
 const blankUser = { student_id: "", name: "", email: "", password: "", role: "student" };
 
