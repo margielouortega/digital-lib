@@ -262,7 +262,74 @@ export default function App() {
 
         {page === "authors" && <section className="page-section"><div className="content-card"><div className="toolbar"><div className="search-box"><Search size={18}/><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search authors…"/></div><span className="result-count">{[...new Set(books.map(b => b.author).filter(Boolean))].filter(x => x.toLowerCase().includes(query.toLowerCase())).length} authors</span></div>{[...new Set(books.map(b => b.author).filter(Boolean))].filter(x => x.toLowerCase().includes(query.toLowerCase())).length ? <div className="table-wrap"><table><thead><tr><th>AUTHOR</th><th>BOOK TITLES</th><th>CATEGORIES</th></tr></thead><tbody>{[...new Set(books.map(b => b.author).filter(Boolean))].filter(x => x.toLowerCase().includes(query.toLowerCase())).sort().map(author => { const rows=books.filter(b=>b.author===author); return <tr key={author}><td><strong>{author}</strong></td><td>{rows.length}</td><td>{[...new Set(rows.map(b=>b.category))].join(", ")}</td></tr>; })}</tbody></table></div> : <Empty title="No authors found" detail="Authors appear here when books are added to the catalog."/>}</div></section>}
 
-        {page === "publishers" && <section className="page-section"><div className="content-card"><div className="toolbar"><div className="search-box"><Search size={18}/><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search publishers…"/></div><span className="result-count">{[...new Set(books.map(b => b.publisher).filter(Boolean))].filter(x => x.toLowerCase().includes(query.toLowerCase())).length} publishers</span></div>{[...new Set(books.map(b => b.publisher).filter(Boolean))].filter(x => x.toLowerCase().includes(query.toLowerCase())).length ? <div className="table-wrap"><table><thead><tr><th>PUBLISHER</th><th>BOOK TITLES</th><th>CATEGORIES</th></tr></thead><tbody>{[...new Set(books.map(b => b.publisher).filter(Boolean))].filter(x => x.toLowerCase().includes(query.toLowerCase())).sort().map(publisher => { const rows=books.filter(b=>b.publisher===publisher); return <tr key={publisher}><td><strong>{publisher}</strong></td><td>{rows.length}</td><td>{[...new Set(rows.map(b=>b.category))].join(", ")}</td></tr>; })}</tbody></table></div> : <Empty title="No publishers recorded" detail="Add publisher details when creating or editing catalog items."/></div></section>}
+       
+{page === "publishers" && (
+  <section className="page-section">
+    <div className="content-card">
+      <div className="toolbar">
+        <div className="search-box">
+          <Search size={18} />
+          <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Search publishers…"
+          />
+        </div>
+        <span className="result-count">
+          {[...new Set(books.map(b => b.publisher).filter(Boolean))]
+            .filter(x => x.toLowerCase().includes(query.toLowerCase()))
+            .length} publishers
+        </span>
+      </div>
+
+      {(() => {
+        const publishers = [...new Set(
+          books.map(b => b.publisher).filter(Boolean)
+        )]
+          .filter(x => x.toLowerCase().includes(query.toLowerCase()))
+          .sort();
+
+        return publishers.length ? (
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>PUBLISHER</th>
+                  <th>BOOK TITLES</th>
+                  <th>CATEGORIES</th>
+                </tr>
+              </thead>
+              <tbody>
+                {publishers.map(publisher => {
+                  const rows = books.filter(
+                    b => b.publisher === publisher
+                  );
+
+                  return (
+                    <tr key={publisher}>
+                      <td><strong>{publisher}</strong></td>
+                      <td>{rows.length}</td>
+                      <td>
+                        {[...new Set(rows.map(b => b.category))]
+                          .join(", ")}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <Empty
+            title="No publishers recorded"
+            detail="Add publisher details when creating or editing catalog items."
+          />
+        );
+      })()}
+    </div>
+  </section>
+)}
+
 
         {page === "users" && librarian && <section className="page-section"><div className="content-card"><div className="toolbar"><div className="search-box"><Search size={18}/><input value={query} onChange={e => setQuery(e.target.value)} placeholder="Search users by name, email, or student ID…"/></div><span className="result-count">{users.filter(u => `${u.name} ${u.email} ${u.student_id || ""}`.toLowerCase().includes(query.toLowerCase())).length} users</span></div>
           {users.filter(u => `${u.name} ${u.email} ${u.student_id || ""}`.toLowerCase().includes(query.toLowerCase())).length ? <div className="table-wrap"><table><thead><tr><th>USER</th><th>STUDENT ID</th><th>ROLE</th><th>DATE ADDED</th><th className="align-right">ACTIONS</th></tr></thead><tbody>{users.filter(u => `${u.name} ${u.email} ${u.student_id || ""}`.toLowerCase().includes(query.toLowerCase())).map(user => <tr key={user.id}><td><div className="book-cell"><div className="user-avatar table-avatar">{user.name.split(" ").map(x=>x[0]).slice(0,2).join("").toUpperCase()}</div><div><strong>{user.name}</strong><small>{user.email}</small></div></div></td><td className="mono">{user.student_id || "—"}</td><td><Status type={user.role === "librarian" ? "role-admin" : "role-student"}>{user.role}</Status></td><td>{user.created_at?.slice(0,10) || "—"}</td><td><div className="row-actions"><button className="icon-btn" title="Edit user" onClick={() => openEditUser(user)}><Pencil size={16}/></button><button className="icon-btn danger-hover" title="Delete user" onClick={() => deleteUser(user)} disabled={user.id === session.user.id}><Trash2 size={16}/></button></div></td></tr>)}</tbody></table></div> : <Empty title="No users found" detail="Add a student or librarian account to get started."/>}
