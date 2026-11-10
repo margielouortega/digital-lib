@@ -10,7 +10,7 @@ const PORT = Number(process.env.PORT || 5000);
 const JWT_SECRET = process.env.JWT_SECRET || 'heu-library-development-secret-change-before-deployment';
 app.use(cors({
   origin: [
-    "https://digital-lib-ey03.onrender.com",
+    "https://digital-lib-ey03.onrender.com/",
     "http://localhost:5173"
   ]
 }));
