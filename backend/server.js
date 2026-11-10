@@ -1,6 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+app.use(cors({
+  origin: process.env.CLIENT_URL
+    ? process.env.CLIENT_URL.split(",").map(url => url.trim())
+    : true
+}));
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const store = require('./database');
