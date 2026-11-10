@@ -8,7 +8,12 @@ const store = require('./database');
 const app = express();
 const PORT = Number(process.env.PORT || 5000);
 const JWT_SECRET = process.env.JWT_SECRET || 'heu-library-development-secret-change-before-deployment';
-app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173' }));
+app.use(cors({
+  origin: [
+    "https://digital-lib-ey03.onrender.com",
+    "http://localhost:5173"
+  ]
+}));
 app.use(express.json());
 
 const safeUser = user => ({ id: user.id, student_id: user.student_id, name: user.name, email: user.email, role: user.role, created_at: user.created_at });
